@@ -17,6 +17,7 @@ export function createStore(reducer, enhance) {
       isDispatching = true
       state = reducer(state, action)
     } catch (error) {
+      console.log("dispatch error = ", error)
       isDispatching = false
     }
     return action
@@ -31,7 +32,7 @@ export function createStore(reducer, enhance) {
 
 export function combineReducer(reducers) {
   return (state, action) => {
-    const initialState = reducer({}, { type: "@type/init" })
+    const initialState = {}
     return Object.keys(reducers).reduce((acc, cur) => {
       acc[cur] = reducers[cur](state[cur], action)
       return acc

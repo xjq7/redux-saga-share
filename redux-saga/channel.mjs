@@ -1,8 +1,9 @@
 function channel() {
-  let _task
+  let _task=[]
 
   function take(task) {
-    _task = task
+    // _task.push(task)
+    _task=task
   }
 
   function put(type, payload) {

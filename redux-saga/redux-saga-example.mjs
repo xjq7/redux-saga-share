@@ -1,22 +1,33 @@
 import { createStore, applyMiddlewares, combineReducer } from "../redux/redux-combineReducer.mjs"
-import { createSagaMiddleware, call, take, put, select, all } from "./index.mjs"
+import { createSagaMiddleware, call, take, put, select, all, fork, cancel } from "./index.mjs"
 import createLoggerMiddleware from "../middleware/redux-logger.mjs"
 import { sleep } from "../util.mjs"
 
-async function getUser(name) {
+async function fetchUser(name) {
   return sleep(2).then(() => ({ name, age: 10, cm: 168 }))
+}
+
+const getUser = (payload) => ({ type: "GET_USER", payload })
+
+function* sagaUser() {
+  console.log(1);
+  let res = yield call(fetchUser, "name")
+  console.log(res,'res1');
+  res = yield call(fetchUser, "ccc")
+  console.log(res,'res2');
+
 }
 
 function* sagaBook() {
   while (true) {
     try {
       const payload = yield take("GET_USER")
-      const { name } = payload
-      const res = yield all({ u1: call(getUser, name), u2: call(getUser, name) })
-      console.log(res,'res')
-      yield put({ type: "GET_USER_SUCCESS", payload: res })
+      const f = yield fork(sagaUser)
+      yield cancel(f)
     } catch (error) {
       console.log(error)
+    }finally{
+      
     }
   }
 }
@@ -26,6 +37,7 @@ export function bookReducer(state = {}, action) {
     case "GET_BOOK_SUCCESS":
       return { ...state, ...action.payload }
   }
+  return state
 }
 
 export function userReducer(state = {}, action) {
@@ -33,6 +45,7 @@ export function userReducer(state = {}, action) {
     case "GET_USER_SUCCESS":
       return { ...state, ...action.payload }
   }
+  return state
 }
 
 const sagaMiddleware = createSagaMiddleware()
@@ -45,7 +58,9 @@ sagaMiddleware.run(sagaBook)
 
 console.log("current store state = ", store.getState())
 
-store.dispatch({ type: "GET_USER", payload: { name: "xjq" } })
+store.dispatch(getUser({ name: "xxx" }))
+
+// store.dispatch(getUser({name:'jjj'}))
 
 setTimeout(() => {
   console.log("current store state = ", store.getState())

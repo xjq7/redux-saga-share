@@ -1,6 +1,8 @@
 import { take } from "./effect.mjs"
 import channel from "./channel.mjs"
 import proc from "./proc.mjs"
+import { is } from "../util.mjs"
+import { IS_CANCELED } from "./const.mjs"
 
 function runTakeEffect({ pattern }, next) {
   channel.take({
@@ -23,7 +25,7 @@ function runPutEffect({ action }, next, store) {
 function runForkEffect({ saga }, next, store) {
   const iterator = saga()
   proc.call(store, iterator)
-  next(null)
+  next(null, iterator)
 }
 
 function runTakeEveryEffect({ pattern, saga }, next, store) {
@@ -65,6 +67,28 @@ function runAllEffect({ obj }, next) {
     })
 }
 
+function runCancelEffect({ task }, next) {
+  task.return(IS_CANCELED)
+  next()
+}
+
+function runCPSEffect({ fn, args }, next) {
+  try {
+    function callback(err, res) {
+      if (is.undef(err)) {
+        next(err)
+      } else {
+        next(null, res)
+      }
+    }
+    fn.call(null, ...args, callback)
+  } catch (error) {
+    next(error)
+  }
+}
+
+
+
 export default {
   take: runTakeEffect,
   call: runCallEffect,
@@ -73,4 +97,6 @@ export default {
   takeEvery: runTakeEveryEffect,
   select: runSelectEffect,
   all: runAllEffect,
+  cancel: runCancelEffect,
+  cps: runCPSEffect,
 }

@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "redux": "node ./redux/redux-simple-example.mjs",
-    "redux-middleware":"node ./redux/redux-middleware-logger-example.mjs",
-    "redux-middlewares":"node ./redux/redux-middlewares-example.mjs",
-    "redux-combineReducer":"node ./redux/redux-combineReducer-example.mjs",
+    "redux-middleware": "node ./redux/redux-middleware-logger-example.mjs",
+    "redux-middlewares": "node ./redux/redux-middlewares-example.mjs",
+    "redux-combineReducer": "node ./redux/redux-combineReducer-example.mjs",
     "logger": "node ./redux/redux-middleware-logger-example.mjs",
-    "thunk":"node ./redux/redux-middleware-thunk-example.mjs",
-    "saga":"node ./redux-saga/redux-saga-example.mjs"
+    "thunk": "node ./redux/redux-middleware-thunk-example.mjs",
+    "saga": "node ./redux-saga/redux-saga-example.mjs"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC"

@@ -46,3 +46,11 @@ export function all(obj) {
     obj,
   }
 }
+
+export function cancel(task){
+  return {
+    isEffect:true,
+    type:'cancel',
+    task
+  }
+}
