@@ -1,4 +1,4 @@
-import { call, take, put, select } from "redux-saga/effects"
+import { call, take, put, select,fork,delay } from "redux-saga/effects"
 import {
   GET_BOOK,
   GET_BOOK_SUCCESS,
@@ -8,6 +8,8 @@ import {
   ADD_BOOK_PAGE,
   ADD_BOOK_PAGE_LOADING,
   ADD_BOOK_PAGE_SUCCESS,
+  ADD_BOOK_PAGE_AUTO,
+  ADD_BOOK_PAGE_AUTO_SUCCESS
 } from "../const/book"
 import { sleep } from "../util"
 
@@ -21,9 +23,9 @@ function addBookPage(page) {
 
 export function* sagaGetBook() {
   while (true) {
-    const { payload } = yield take(GET_BOOK)
+    yield take(GET_BOOK)
     yield put({ type: GET_BOOK_LOADING })
-    const res = yield call(fetchBook, payload.name)
+    const res = yield call(fetchBook)
     yield put({ type: GET_BOOK_SUCCESS, payload: res })
   }
 }
@@ -37,8 +39,22 @@ export function* sagaAddBookPage() {
       const res = yield call(addBookPage, page)
       yield put({ type: ADD_BOOK_PAGE_SUCCESS, payload: res })
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
+  }
+}
+
+export function* autoAddBookPage(){
+  yield delay(2000)
+  yield put({
+    type:ADD_BOOK_PAGE_AUTO_SUCCESS
+  })
+}
+
+export function* sagaAutoAddBookPage(){
+  while(true){
+    yield take(ADD_BOOK_PAGE_AUTO);
+    yield fork(autoAddBookPage)
   }
 }
 
@@ -48,3 +64,6 @@ export function* sagaReset() {
     yield put({ type: RESET_SUCCESS })
   }
 }
+
+
+

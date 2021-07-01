@@ -28,25 +28,10 @@ export function createStore(reducer, enhance) {
   }
 }
 
-export function applyMiddlewareFake(middleware) {
-  return (createStore) => (reducer) => {
-    let store = createStore(reducer)
-    let dispatch = middleware(store)(store.dispatch)
-    return { ...store, dispatch }
-  }
-}
-
 export function applyMiddleware(middleware) {
   return (createStore) => (reducer) => {
     let store = createStore(reducer)
-    let dispatch = () => {
-      throw new Error("")
-    }
-    const middlewareAPI = {
-      getState: store.getState,
-      dispatch: (action, ...args) => dispatch(action, ...args),
-    }
-    dispatch = middleware(middlewareAPI)(store.dispatch)
+    let dispatch = middleware(store)(store.dispatch)
     return { ...store, dispatch }
   }
 }

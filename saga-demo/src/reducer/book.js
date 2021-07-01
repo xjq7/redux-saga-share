@@ -1,4 +1,4 @@
-import { GET_BOOK_SUCCESS, RESET_SUCCESS, GET_BOOK_LOADING, ADD_BOOK_PAGE_SUCCESS } from "../const/book"
+import { GET_BOOK_SUCCESS, RESET_SUCCESS, GET_BOOK_LOADING, ADD_BOOK_PAGE_SUCCESS, ADD_BOOK_PAGE_AUTO_SUCCESS } from "../const/book"
 
 export function bookReducer(state = { fetchLoading: false }, action) {
   switch (action.type) {
@@ -7,8 +7,9 @@ export function bookReducer(state = { fetchLoading: false }, action) {
     case GET_BOOK_LOADING:
       return { ...state, fetchLoading: true }
     case ADD_BOOK_PAGE_SUCCESS:
-      console.log(action.payload);
       return { ...state, page: action.payload.page }
+    case ADD_BOOK_PAGE_AUTO_SUCCESS:
+      return { ...state, page: state.bookReducer.page+1 }
     case RESET_SUCCESS:
       return {}
     default:

@@ -10,7 +10,8 @@
     "redux-combineReducer": "node ./redux/redux-combineReducer-example.mjs",
     "logger": "node ./redux/redux-middleware-logger-example.mjs",
     "thunk": "node ./redux/redux-middleware-thunk-example.mjs",
-    "saga": "node ./redux-saga/redux-saga-example.mjs"
+    "saga": "node ./redux-saga/redux-saga-example.mjs",
+    "gen":"node gen.js"
   },
   "type": "module",
   "keywords": [],

@@ -1,3 +1,5 @@
+import { sleep } from "../util.mjs"
+
 export function take(pattern) {
   return {
     isEffect: true,
@@ -47,10 +49,12 @@ export function all(obj) {
   }
 }
 
-export function cancel(task){
+export function cancel(task) {
   return {
-    isEffect:true,
-    type:'cancel',
-    task
+    isEffect: true,
+    type: "cancel",
+    task,
   }
 }
+
+export const delay = call.bind(null, sleep)

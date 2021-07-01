@@ -1,5 +1,5 @@
-import { is } from "../util.mjs"
-import runEffectMap from "./runEffect.mjs"
+import { is } from "../util"
+import runEffectMap from "./runEffect"
 
 function runEffectWithNext({ type, ...args }, next, store) {
   runEffectMap[type](args, next, store)

@@ -4,6 +4,19 @@ import proc from "./proc.mjs"
 import { is } from "../util.mjs"
 import { IS_CANCELED } from "./const.mjs"
 
+const runEffect = {
+  take: runTakeEffect,
+  call: runCallEffect,
+  put: runPutEffect,
+  fork: runForkEffect,
+  select: runSelectEffect,
+  cps: runCPSEffect,
+  all: runAllEffect,
+  race: runRaceEffect,
+  cancel: runCancelEffect,
+  takeEvery: runTakeEveryEffect,
+}
+
 function runTakeEffect({ pattern }, next) {
   channel.take({
     pattern,
@@ -24,8 +37,8 @@ function runPutEffect({ action }, next, store) {
 
 function runForkEffect({ saga }, next, store) {
   const iterator = saga()
-  proc.call(store, iterator)
   next(null, iterator)
+  proc.call(store, iterator)
 }
 
 function runTakeEveryEffect({ pattern, saga }, next, store) {
@@ -50,21 +63,29 @@ function runSelectEffect({ selector }, next, store) {
   }
 }
 
-function runAllEffect({ obj }, next) {
-  const objToArray = Object.keys(obj).map((key) => {
-    return { key, obj: obj[key] }
-  })
-  const promisesResults = {}
-  Promise.all(objToArray.map(({ obj: { fn, args } }) => fn(...args)))
-    .then((results) => {
-      results.forEach((v, i) => {
-        promisesResults[objToArray[i].key] = v
-      })
-      next(null, promisesResults)
-    })
-    .catch((err) => {
-      next(err)
-    })
+function runAllEffect({ obj }, next, store) {
+  let len, values
+  if (Array.isArray(obj)) {
+    values = []
+    len = obj.length
+  } else {
+    values = {}
+    len = Object.keys(obj)
+  }
+
+  let runChildCount = 0
+
+  for (const key in obj) {
+    function childNext(err, value) {
+      runChildCount++
+      values[key] = value
+      if (err) throw err
+      if (runChildCount === len) {
+        next(null, values)
+      }
+    }
+    runEffect[obj[key].type](obj[key], childNext, store)
+  }
 }
 
 function runCancelEffect({ task }, next) {
@@ -87,16 +108,28 @@ function runCPSEffect({ fn, args }, next) {
   }
 }
 
+function runRaceEffect({ obj }, next, store) {
+  let values
+  if (Array.isArray(obj)) {
+    values = []
+  } else {
+    values = {}
+  }
 
+  let isComplete = false
 
-export default {
-  take: runTakeEffect,
-  call: runCallEffect,
-  put: runPutEffect,
-  fork: runForkEffect,
-  takeEvery: runTakeEveryEffect,
-  select: runSelectEffect,
-  all: runAllEffect,
-  cancel: runCancelEffect,
-  cps: runCPSEffect,
+  for (const key in obj) {
+    function childNext(err, value) {
+      if(isComplete=false)return
+      isComplete=true
+      if (err) {
+        throw err
+      }
+      values[key] = value
+      next(null, values)
+    }
+    runEffect[obj[key].type](obj[key], childNext, store)
+  }
 }
+
+export default runEffect

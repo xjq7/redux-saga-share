@@ -1,4 +1,4 @@
-import { createStore, applyMiddlewareFake } from "./redux-middleware.mjs"
+import { createStore, applyMiddleware } from "./redux-middleware.mjs"
 import createThunkMiddleware from "../middleware/redux-thunk.mjs"
 import { sleep } from "../util.mjs"
 
@@ -16,7 +16,7 @@ export function bookReducer(state = {}, action) {
   }
 }
 
-const store = createStore(bookReducer, applyMiddlewareFake(createThunkMiddleware()))
+const store = createStore(bookReducer, applyMiddleware(createThunkMiddleware()))
 
 console.log("current store state = ", store.getState())
 store.dispatch(bookAction("提问的艺术"))

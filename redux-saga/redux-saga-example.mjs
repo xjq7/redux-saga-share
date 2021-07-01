@@ -1,5 +1,5 @@
 import { createStore, applyMiddlewares, combineReducer } from "../redux/redux-combineReducer.mjs"
-import { createSagaMiddleware, call, take, put, select, all, fork, cancel } from "./index.mjs"
+import { createSagaMiddleware, call, take, put, select, all, fork, cancel, delay } from "./index.mjs"
 import createLoggerMiddleware from "../middleware/redux-logger.mjs"
 import { sleep } from "../util.mjs"
 
@@ -7,29 +7,37 @@ async function fetchUser(name) {
   return sleep(2).then(() => ({ name, age: 10, cm: 168 }))
 }
 
+async function fetchBook(name) {
+  return sleep(2).then(() => ({ name, page: 100 }))
+}
+
 const getUser = (payload) => ({ type: "GET_USER", payload })
+const getBook = (payload) => ({ type: "GET_BOOK", payload })
 
 function* sagaUser() {
-  console.log(1);
+  const payload = yield take("GET_USER1")
   let res = yield call(fetchUser, "name")
-  console.log(res,'res1');
   res = yield call(fetchUser, "ccc")
-  console.log(res,'res2');
-
 }
 
 function* sagaBook() {
   while (true) {
     try {
-      const payload = yield take("GET_USER")
-      const f = yield fork(sagaUser)
-      yield cancel(f)
+      const payload = yield take("GET_BOOK")
+      let res = yield all([call(fetchBook, "name"), call(fetchBook, "name")])
+      yield take("GET_USER")
+      console.log(res, "rr")
     } catch (error) {
       console.log(error)
-    }finally{
-      
+    } finally {
     }
   }
+}
+
+const sagas = [sagaBook, sagaUser]
+
+function* rootSaga() {
+  yield all(sagas.map((saga) => fork(saga)))
 }
 
 export function bookReducer(state = {}, action) {
@@ -54,14 +62,14 @@ const reducers = combineReducer({ book: bookReducer, user: userReducer })
 
 const store = createStore(reducers, applyMiddlewares([createLoggerMiddleware(), sagaMiddleware]))
 
-sagaMiddleware.run(sagaBook)
+sagaMiddleware.run(rootSaga)
 
 console.log("current store state = ", store.getState())
 
-store.dispatch(getUser({ name: "xxx" }))
+store.dispatch(getBook({ name: "xxx" }))
 
-// store.dispatch(getUser({name:'jjj'}))
 
 setTimeout(() => {
   console.log("current store state = ", store.getState())
+  // store.dispatch(getUser({ name: "xxx" }))
 }, 5000)

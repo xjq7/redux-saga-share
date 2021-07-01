@@ -1,15 +1,21 @@
 function channel() {
-  let _task=[]
+  let _task = []
 
   function take(task) {
-    // _task.push(task)
-    _task=task
+    _task.push(task)
   }
 
   function put(type, payload) {
-    if (!_task) return
-    if (type === _task.pattern){
-      _task.cb.call(null, payload)}
+    const cbs = []
+    for (const task of _task) {
+      if (type === task.pattern) {
+        cbs.push(task.cb)
+      }
+    }
+    _task = _task.filter((t) => t.pattern !== type)
+    for (const cb of cbs) {
+      cb.call(null, payload)
+    }
   }
   return {
     take,
