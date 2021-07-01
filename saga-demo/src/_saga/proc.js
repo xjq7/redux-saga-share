@@ -1,4 +1,4 @@
-import { is } from "../util"
+import { is } from "./utils"
 import runEffectMap from "./runEffect"
 
 function runEffectWithNext({ type, ...args }, next, store) {
@@ -15,7 +15,7 @@ export default function proc(iterator) {
     
     const it = iterator.next(preValue)
     const { done, value } = it
-
+    
     if (done) return
     
     if (is.promise(value)) {

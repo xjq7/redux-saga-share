@@ -1,4 +1,4 @@
-import { call, take, put, select,fork,delay } from "redux-saga/effects"
+import { call, take, put, select, fork, delay, join, spawn, cancel,cancelled } from "redux-saga/effects"
 import {
   GET_BOOK,
   GET_BOOK_SUCCESS,
@@ -9,7 +9,7 @@ import {
   ADD_BOOK_PAGE_LOADING,
   ADD_BOOK_PAGE_SUCCESS,
   ADD_BOOK_PAGE_AUTO,
-  ADD_BOOK_PAGE_AUTO_SUCCESS
+  ADD_BOOK_PAGE_AUTO_SUCCESS,
 } from "../const/book"
 import { sleep } from "../util"
 
@@ -44,17 +44,40 @@ export function* sagaAddBookPage() {
   }
 }
 
-export function* autoAddBookPage(){
+export function* autoAddBookPage() {
+  console.log(222)
+
   yield delay(2000)
   yield put({
-    type:ADD_BOOK_PAGE_AUTO_SUCCESS
+    type: ADD_BOOK_PAGE_AUTO_SUCCESS,
   })
+  console.log(333)
 }
 
-export function* sagaAutoAddBookPage(){
-  while(true){
-    yield take(ADD_BOOK_PAGE_AUTO);
-    yield fork(autoAddBookPage)
+function* test1(){
+  console.log('test1');
+  console.log('test1');
+  console.log('test1');
+  yield delay(3000)
+}
+
+function* test2(){
+  console.log('test2');
+  yield delay(3000)
+}
+
+export function* sagaAutoAddBookPage() {
+  while (true) {
+    try {
+      yield take(ADD_BOOK_PAGE_AUTO)
+      yield fork(test1)
+      yield fork(test2)
+      // yield cancel()
+      // yield join(task);
+      console.log(111)
+    } catch (error) {
+      console.log("err")
+    }
   }
 }
 
@@ -64,6 +87,3 @@ export function* sagaReset() {
     yield put({ type: RESET_SUCCESS })
   }
 }
-
-
-

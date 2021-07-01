@@ -3,7 +3,8 @@ import { getUser, resetUser } from "./action/user"
 import { useSelector, useDispatch } from "react-redux"
 import { Button, Card } from "antd"
 import "./App.css"
-import { getBook, resetBook ,addBookPage} from "./action/book"
+import { getBook, resetBook, addBookPage } from "./action/book"
+import { ADD_BOOK_PAGE_AUTO } from "./const/book"
 
 function App() {
   const dispatch = useDispatch()
@@ -46,7 +47,7 @@ function App() {
           重置user
         </Button>
       </div>
-      <div className="mt20">
+      <div className='mt20'>
         <Button
           onClick={() => {
             dispatch(getUser({ name: "xxx" }))
@@ -62,6 +63,14 @@ function App() {
           className='mr10'
         >
           add book page
+        </Button>
+        <Button
+          onClick={() => {
+            dispatch({ type: ADD_BOOK_PAGE_AUTO })
+          }}
+          className='mr10'
+        >
+          auto add book page
         </Button>
       </div>
       <div>{bookFetchLoading && <p>book is dispatching ...</p>}</div>

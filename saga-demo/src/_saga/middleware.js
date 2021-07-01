@@ -1,16 +1,15 @@
-import channel from "./channel.mjs"
-import proc from "./proc.mjs"
+import channel from "./channel"
+import proc from "./proc"
 
-export function createSagaMiddleware() {
+export default function createSagaMiddleware() {
   let _store
   function sagaMiddleware(store) {
     _store = store
     return (next) => (action) => {
-      console.log('saga start--- action type=',action.type)
+      console.log('saga start--- action =',action)
       const result = next(action)
-      console.log('saga end--- action type=',action.type)
-      const { type, payload } = action
-      channel.put(type, payload)
+      console.log('saga end--- action =',action)
+      channel.put(action)
       return result
     }
   }

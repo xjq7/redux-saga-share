@@ -4,9 +4,10 @@ function channel() {
     _task = task
   }
 
-  function put(type, payload) {
-    if (_task.pattern === type) {
-      _task.cb.call(null, payload)
+  function put(action) {
+    if(!_task)return
+    if (_task.pattern === action.type) {
+      _task.cb.call(null, action)
       _task=null
     }
   }

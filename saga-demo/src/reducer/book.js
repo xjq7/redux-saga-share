@@ -9,7 +9,7 @@ export function bookReducer(state = { fetchLoading: false }, action) {
     case ADD_BOOK_PAGE_SUCCESS:
       return { ...state, page: action.payload.page }
     case ADD_BOOK_PAGE_AUTO_SUCCESS:
-      return { ...state, page: state.bookReducer.page+1 }
+      return { ...state, page: Math.random() }
     case RESET_SUCCESS:
       return {}
     default:
