@@ -8,7 +8,7 @@ import { GET_USER, RESET_USER } from "./const/user"
 function App() {
   const dispatch = useDispatch()
   const state = useSelector((state) => state)
-  
+
   return (
     <div className='center'>
       <div>
@@ -55,7 +55,7 @@ function App() {
           重置user
         </Button>
       </div>
-      
+
       <Card title='store' className='mt20'>
         {Object.keys(state).map((key, index) => {
           return (
@@ -69,4 +69,11 @@ function App() {
   )
 }
 
+
+if(g==1){
+  let a=1
+}
+
+console.log(g);
+g = 1
 export default App
