@@ -1,7 +1,6 @@
 // 支持中间件
 export function createStore(reducer, enhance) {
   let state = {}
-  let isDispatching = false
 
   if (typeof enhance === "function") {
     return enhance(createStore)(reducer)
@@ -14,11 +13,8 @@ export function createStore(reducer, enhance) {
   function dispatch(action) {
     console.log("dispatch is call and action is ", action)
     try {
-      isDispatching = true
       state = reducer(state, action)
-    } catch (error) {
-      isDispatching = false
-    }
+    } catch (error) {}
     return action
   }
 
@@ -30,7 +26,7 @@ export function createStore(reducer, enhance) {
 
 // [a,b,c]
 // =>
-// a(b(c()))
+// a(b(c(dispatch)))
 const compose = (array) => {
   return array.reduce(
     (acc, cur) =>

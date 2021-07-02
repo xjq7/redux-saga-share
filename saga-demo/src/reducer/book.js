@@ -1,17 +1,15 @@
-import { GET_BOOK_SUCCESS, RESET_SUCCESS, GET_BOOK_LOADING, ADD_BOOK_PAGE_SUCCESS, ADD_BOOK_PAGE_AUTO_SUCCESS } from "../const/book"
+import { ADD_COUNT_AUTO_SUCCESS, RESET_BOOK_SUCCESS } from "../const/book"
 
-export function bookReducer(state = { fetchLoading: false }, action) {
+const initState = {
+  count: 0,
+}
+
+export function book(state = initState, action) {
   switch (action.type) {
-    case GET_BOOK_SUCCESS:
-      return { ...state, fetchLoading: false, ...action.payload }
-    case GET_BOOK_LOADING:
-      return { ...state, fetchLoading: true }
-    case ADD_BOOK_PAGE_SUCCESS:
-      return { ...state, page: action.payload.page }
-    case ADD_BOOK_PAGE_AUTO_SUCCESS:
-      return { ...state, page: Math.random() }
-    case RESET_SUCCESS:
-      return {}
+    case ADD_COUNT_AUTO_SUCCESS:
+      return { ...state, count: state.count + 1 }
+    case RESET_BOOK_SUCCESS:
+      return initState
     default:
   }
   return state

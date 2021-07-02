@@ -1,7 +1,6 @@
 // 支持中间件
 export function createStore(reducer, enhance) {
   let state = {}
-  let isDispatching = false
 
   if (typeof enhance === "function") {
     return enhance(createStore)(reducer)
@@ -14,10 +13,8 @@ export function createStore(reducer, enhance) {
   function dispatch(action) {
     console.log("dispatch is call and action is ", action)
     try {
-      isDispatching = true
       state = reducer(state, action)
     } catch (error) {
-      isDispatching = false
     }
     return action
   }
@@ -30,8 +27,11 @@ export function createStore(reducer, enhance) {
 
 export function applyMiddleware(middleware) {
   return (createStore) => (reducer) => {
+    // 创建store
     let store = createStore(reducer)
+    // 强化dispatch
     let dispatch = middleware(store)(store.dispatch)
+    // 替换dispatch为强化后的
     return { ...store, dispatch }
   }
 }

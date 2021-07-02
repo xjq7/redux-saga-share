@@ -1,10 +1,10 @@
-import { GET_USER_SUCCESS, RESET_SUCCESS } from "../const/user"
+import { GET_USER_SUCCESS, RESET_USER_SUCCESS } from "../const/user"
 
-export function userReducer(state = {}, action) {
+export function user(state = {}, action) {
   switch (action.type) {
     case GET_USER_SUCCESS:
       return { ...state, ...action.payload }
-    case RESET_SUCCESS:
+    case RESET_USER_SUCCESS:
       return {}
     default:
   }

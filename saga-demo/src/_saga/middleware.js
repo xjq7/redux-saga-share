@@ -6,9 +6,7 @@ export default function createSagaMiddleware() {
   function sagaMiddleware(store) {
     _store = store
     return (next) => (action) => {
-      console.log('saga start--- action =',action)
       const result = next(action)
-      console.log('saga end--- action =',action)
       channel.put(action)
       return result
     }

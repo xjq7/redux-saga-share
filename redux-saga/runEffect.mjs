@@ -14,7 +14,6 @@ const runEffect = {
   all: runAllEffect,
   race: runRaceEffect,
   cancel: runCancelEffect,
-  takeEvery: runTakeEveryEffect,
 }
 
 function runTakeEffect({ pattern }, next) {
@@ -37,18 +36,8 @@ function runPutEffect({ action }, next, store) {
 
 function runForkEffect({ saga }, next, store) {
   const iterator = saga()
-  next(null, iterator)
   proc.call(store, iterator)
-}
-
-function runTakeEveryEffect({ pattern, saga }, next, store) {
-  function* takeEvery() {
-    while (true) {
-      yield take(pattern)
-      yield fork(saga)
-    }
-  }
-  runForkEffect({ saga: takeEvery }, next, store)
+  next(null, iterator)
 }
 
 function runSelectEffect({ selector }, next, store) {
@@ -120,8 +109,8 @@ function runRaceEffect({ obj }, next, store) {
 
   for (const key in obj) {
     function childNext(err, value) {
-      if(isComplete=false)return
-      isComplete=true
+      if ((isComplete = false)) return
+      isComplete = true
       if (err) {
         throw err
       }

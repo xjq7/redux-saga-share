@@ -32,6 +32,7 @@ export function userReducer(state = {}, action) {
       return { ...state, ...action.payload }
   }
 }
+
 const reducers = combineReducer({ book: bookReducer, user: userReducer })
 const store = createStore(reducers, applyMiddlewares([createLoggerMiddleware(), createThunkMiddleware()]))
 
