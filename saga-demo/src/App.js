@@ -5,9 +5,9 @@ import "./App.css"
 import { UPDATE_COUNT, ADD_COUNT_AUTO, RESET_BOOK } from "./const/book"
 import { GET_USER, RESET_USER } from "./const/user"
 
-function App() {
+function App () {
   const dispatch = useDispatch()
-  const state = useSelector((state) => state)
+  const state = useSelector(state => state)
 
   return (
     <div className='center'>
@@ -40,7 +40,7 @@ function App() {
       <div className='mt20'>
         <Button
           onClick={() => {
-            dispatch({ type: GET_USER })
+            dispatch({ type: GET_USER, payload: { name: "xxx" } })
           }}
           className='mr10'
         >
@@ -57,23 +57,13 @@ function App() {
       </div>
 
       <Card title='store' className='mt20'>
-        {Object.keys(state).map((key, index) => {
-          return (
-            <p key={index}>
-              {key}: {JSON.stringify(state[key])}
-            </p>
-          )
-        })}
+        {Object.keys(state).map((key, index) => (
+          <p key={index}>
+            {key}: {JSON.stringify(state[key])}
+          </p>
+        ))}
       </Card>
     </div>
   )
 }
-
-
-if(g==1){
-  let a=1
-}
-
-console.log(g);
-g = 1
 export default App

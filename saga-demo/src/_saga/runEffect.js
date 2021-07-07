@@ -1,4 +1,4 @@
-import channel from './channel' 
+import channel from "./channel" 
 
 const runEffect = {
   take: runTakeEffect,
@@ -9,14 +9,14 @@ const runEffect = {
 function runTakeEffect({ pattern }, next) {
   channel.take({
     pattern,
-    cb: (args) => next(null, args),
+    cb: args => next(null, args),
   })
 }
 
 function runCallEffect({ fn, args }, next, store) {
   fn.call(null, ...args)
-    .then((success) => next(null, success))
-    .catch((error) => next(error))
+    .then(success => next(null, success))
+    .catch(error => next(error))
 }
 
 function runPutEffect({ action }, next, store) {
