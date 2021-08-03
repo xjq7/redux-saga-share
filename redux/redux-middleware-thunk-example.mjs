@@ -19,6 +19,7 @@ export function bookReducer(state = {}, action) {
 const store = createStore(bookReducer, applyMiddleware(createThunkMiddleware()))
 
 console.log("current store state = ", store.getState())
+
 store.dispatch(bookAction("提问的艺术"))
 
 setTimeout(() => {

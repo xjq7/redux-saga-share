@@ -29,7 +29,7 @@ module.exports = {
     "no-func-assign": 1,
     "no-inner-declarations": 1,
     "prefer-rest-params": 2,
-    "default-param-last": 2,
+    "default-param-last": 1,
     "no-param-reassign": 1,
     "function-paren-newline": [2, { minItems: 6 }],
     "arrow-parens": [2, "as-needed", { "requireForBlockBody": true }],

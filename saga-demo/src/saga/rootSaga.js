@@ -9,5 +9,5 @@ queue.push(sagaResetUser)
 queue.push(sagaAutoAddBookCount)
 
 export default function* rootSaga() {
-  yield all(queue.map((task) => fork(task)))
+  yield all(queue.map(task => fork(task)))
 }

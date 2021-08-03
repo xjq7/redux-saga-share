@@ -19,7 +19,7 @@ export default function proc(iterator) {
     if (done) return
     
     if (is.promise(value)) {
-      value.then((success) => next(null, success)).catch((err) => next(err))
+      value.then(success => next(null, success)).catch(err => next(err))
     } else if (is.effect(value)) {
       runEffectWithNext(value, next, _store)
     } else {

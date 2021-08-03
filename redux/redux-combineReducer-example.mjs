@@ -1,24 +1,24 @@
-import { createStore, combineReducer, applyMiddlewares ,applyMiddlewaresFake} from "./redux-combineReducer.mjs"
+import { createStore, combineReducer, applyMiddlewares, applyMiddlewaresFake } from "./redux-combineReducer.mjs"
 import createLoggerMiddleware from "../middleware/redux-logger.mjs"
 import createThunkMiddleware from "../middleware/redux-thunk.mjs"
 import { sleep } from "../util.mjs"
 
-export function bookAction(name) {
+export function bookAction (name) {
   return function (dispatch, getState) {
-    sleep(2).then(()=>{
+    sleep(2).then(() => {
       dispatch({ type: "GET_BOOK_SUCCESS", payload: { name } })
     })
   }
 }
 
-export function bookReducer(state = {}, action) {
+export function bookReducer (state = {}, action) {
   switch (action.type) {
     case "GET_BOOK_SUCCESS":
       return { ...state, ...action.payload }
   }
 }
 
-export function userAction(name) {
+export function userAction (name) {
   return function (dispatch, getState) {
     return sleep(2).then(() => {
       dispatch({ type: "GET_USER_SUCCESS", payload: { name } })
@@ -26,7 +26,7 @@ export function userAction(name) {
   }
 }
 
-export function userReducer(state = {}, action) {
+export function userReducer (state = {}, action) {
   switch (action.type) {
     case "GET_USER_SUCCESS":
       return { ...state, ...action.payload }

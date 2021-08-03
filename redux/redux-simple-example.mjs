@@ -9,6 +9,6 @@ export function bookReducer(state = {}, action) {
 
 const store = createStore(bookReducer)
 
-console.log("dispatch start------  my store state=", store.getState())
+console.log("dispatch start------  my store state=", store.getState(),'\n')
 store.dispatch({ type: "BOOK", payload: { name: "xjq" } })
-console.log("dispatch end------  my store state=", store.getState())
+console.log("dispatch end------  my store state=", store.getState(),'\n')

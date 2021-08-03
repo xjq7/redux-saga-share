@@ -1,6 +1,6 @@
 // 最简版本的redux
 export function createStore(reducer) {
-  let state
+  let state={}
 
   function getState() {
     return state

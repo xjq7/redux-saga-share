@@ -27,6 +27,7 @@ export function createStore(reducer, enhance) {
 // [a,b,c]
 // =>
 // a(b(c(dispatch)))
+
 const compose = (array) => {
   return array.reduce(
     (acc, cur) =>
